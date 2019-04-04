@@ -21,3 +21,6 @@ MAX.BB.VALUE = 10
 source.template.file = file.path(source.path, file.D2L.GRADEBOOK)
 file.D2L.IMPORT = file.path(source.path, 'WebAssign-IMPORT.csv')
   
+if (file.exists('myConfig.R')) {
+    source('myConfig.R')
+}

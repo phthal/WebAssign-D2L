@@ -6,7 +6,8 @@ Converts the scores from WebAssign into the format for Desire2Learn (including B
 
 Run `RStudio` and open the project. 
 
-1) configure paths in `config.R`
+1) configure paths in `config.R` and 
+1) personalized configuration in `myConfig.R` (overwrites `config.R`)
 1) enter columns in D2L gradebook
 1) export gradebook from D2L and save in file `D2L-Course-Gradebook.csv`
 1) run `make.Student.List.R` to create file `Student-List.csv`
