@@ -17,7 +17,7 @@ MAX.BB.VALUE = 10
 
 ################# Other definitions
 
-# go to BeachBoard and save WebAssign grades into this file
+# go to D2L and save WebAssign grades into this file
 source.template.file = file.path(source.path, file.D2L.GRADEBOOK)
 file.D2L.IMPORT = file.path(source.path, 'WebAssign-IMPORT.csv')
   
