@@ -73,6 +73,9 @@ q1 = data.frame(
 
 # load the D2L template
 ###############################
+if(!file.exists(source.template.file)) {
+    print(paste("ERROR: Template File not found:", source.template.file))
+}
 d1 = read.csv(source.template.file, check.names=FALSE)
 names(d1)
 first.col = which(grepl('.*Points Grade.*',names(d1))==TRUE)[1]
