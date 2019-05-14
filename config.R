@@ -2,7 +2,7 @@
 ###############
 
 # configure the course path
-source.path = '2019 Spring/WebAssign'
+source.path = 'WebAssign'
 
 # source file with gradebook for course
 file.D2L.GRADEBOOK = 'D2L-Course-Gradebook.csv'

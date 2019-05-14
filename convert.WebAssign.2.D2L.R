@@ -14,9 +14,10 @@
 # Configuration
 ###############
 source('config.R')
-
+library(stringr)
 # find the most recent WebAssign file
-file.list = file.path(source.path, dir(source.path, '\\d{6+}\\.csv$'))
+file.list = file.path(source.path, 
+                      dir(source.path, pattern = '\\d{6,}\\.csv$'))
 fname = file.list[which.max(file.info(file.list)$mtime)]
 print(paste("Scores from: ",file.info(fname)$mtime))
 
