@@ -23,8 +23,6 @@ print(paste("Scores from: ",file.info(fname)$mtime))
 
 # Read Data
 ###########
-library(stringr)
-
 trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 
 d = read.csv(fname, skip=4, header=TRUE, stringsAsFactors = FALSE)
@@ -42,7 +40,7 @@ chapters = which(substr(names(d),1,3)==HOMEWORK.NAME)
 q = d[,chapters]
 points.max = points.max[chapters]
 q = as.data.frame(lapply(q, as.numeric))
-
+head(q)
 # add first and last names and student ID
 #########################################
 unlist(lapply(strsplit(d$Assignment.Name, ","),'[[',1)) -> LastNames
@@ -62,7 +60,8 @@ d3[is.na(d3)] <- 0
 for(i in 1:ncol(d3)) {
   d3[,i] = signif(d3[,i]/points.max[i]*MAX.BB.VALUE,3)
 }
-d3
+head(d3)
+
 q1 = data.frame(
   OrgDefinedId = q$OrgDefinedId,
   FirstNames = q$FirstNames,
@@ -70,7 +69,7 @@ q1 = data.frame(
   d3,
   EndLine = rep("#",nrow(q))
 )
-
+head(q1)
 
 # load the D2L template
 ###############################
@@ -88,7 +87,7 @@ names(q1)[ncol(q1)] = " End-of-Line Indicator"    # add the sapce there
 
 # remove instructors
 ####################
-q1 = q1[-which(q1$OrgDefinedId=='#0000NA'),] 
+#q1 = q1[-which(q1$OrgDefinedId=='#0000NA'),] 
 
 
 # write data to file

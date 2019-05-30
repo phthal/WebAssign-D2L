@@ -9,9 +9,9 @@ Run `RStudio` and open the project.
 1) configure paths in `config.R` and 
 1) personalized configuration in `myConfig.R` (overwrites `config.R`)
 1) enter columns in D2L gradebook
-1) export gradebook from D2L and save in file `D2L-Course-Gradebook.csv`
+1) export gradebook from D2L and save in file `D2L-Course-Gradebook.csv` (Note:  include ALL Homework columns and no other columns)
 1) run `make.Student.List.R` to create file `Student-List.csv`
-
+1) modify `HOMEWORK.NAME` variable to unique string in header of Homework in Gradebook, it must be 3 letters exactly
 
 ## Transfer Grades
 
