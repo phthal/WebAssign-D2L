@@ -25,77 +25,52 @@ print(paste("Scores from: ",file.info(fname)$mtime))
 ###########
 trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 
+# read headers from WebAssign
 d = read.csv(fname, skip=4, header=TRUE, stringsAsFactors = FALSE)
 my.headers = names(d)
 points.max = as.numeric(d[2,])
 my.headers 
 
+# read WebAssign Data
 d = read.csv(fname, skip=9, header=FALSE, stringsAsFactors = FALSE)
 names(d) = my.headers
 head(d)
 
-# only get chapters with homework
-##################################
-chapters = which(substr(names(d),1,3)==HOMEWORK.NAME)
-q = d[,chapters]
-points.max = points.max[chapters]
-q = as.data.frame(lapply(q, as.numeric))
-head(q)
-# add first and last names and student ID
-#########################################
-unlist(lapply(strsplit(d$Assignment.Name, ","),'[[',1)) -> LastNames
-unlist(lapply(strsplit(d$Assignment.Name, ","),'[[',2)) -> FirstNames
-q$FirstNames = trim(FirstNames)
-q$LastNames = trim(LastNames)
-q$OrgDefinedId = paste("#",str_sub(paste("0000",d$X.1,sep=''), start= -9),sep='')
-head(q)
-
-
-# select homework columns and scale results
+# only get chapters with homework and scale
 ###########################################
-d3 = as.data.frame(lapply(d[,which(substr(names(d),1,3)==HOMEWORK.NAME)], as.numeric))
-head(d3)
-d3[is.na(d3)] <- 0
-
-for(i in 1:ncol(d3)) {
-  d3[,i] = signif(d3[,i]/points.max[i]*MAX.BB.VALUE,3)
+chapters = which(substr(names(d),1,3)==HOMEWORK.NAME)
+for(chp in chapters) {
+  d[,chp] = as.numeric(d[,chp])
+  d[is.na(d[,chp]),chp] <- 0
+  d[,chp] = signif(d[,chp]/points.max[chp]*MAX.BB.VALUE,3)
 }
-head(d3)
 
-q1 = data.frame(
-  OrgDefinedId = q$OrgDefinedId,
-  FirstNames = q$FirstNames,
-  LastNames = q$LastNames,
-  d3,
-  EndLine = rep("#",nrow(q))
-)
-head(q1)
+# kepp only relevant columns
+d1 = d[,c(1,3,chapters)]
+d1$OrgDefinedId = paste("#",str_sub(paste("0000",d1$X.1,sep=''), start= -9),sep='')
+d1
+
 
 # load the D2L template
 ###############################
 if(!file.exists(source.template.file)) {
     print(paste("ERROR: Template File not found:", source.template.file))
 }
-d1 = read.csv(source.template.file, check.names=FALSE)
-names(d1)
-first.col = which(grepl('.*Points Grade.*',names(d1))==TRUE)[1]
-head(q1)
-Points.Grade = names(d1)[first.col:(ncol(q1))]
+d.template = read.csv(source.template.file, check.names=FALSE)
+first.col = which(grepl('.*Points Grade.*',names(d.template))==TRUE)[1]
+Points.Grade = names(d.template)[first.col:(ncol(d.template))]
 gsub('\\s*<.*>','',Points.Grade) -> Points.Grade
-names(q1)[4:(ncol(q1)-1)] <- Points.Grade
-names(q1)[ncol(q1)] = " End-of-Line Indicator"    # add the sapce there
 
-# remove instructors
-####################
-#q1 = q1[-which(q1$OrgDefinedId=='#0000NA'),] 
+d1$X.1 = d1$Assignment.Name
+d1$Assignment.Name = d1$OrgDefinedId
+head(d1)
 
+l.col = ncol(d1)-1
+names(d1)[3:l.col] <- Points.Grade[1:(l.col-2)]
+names(d1)[ncol(d1)] = "End-of-Line Indicator"    # add the sapce there
+d1[,ncol(d1)] = "#"
 
 # write data to file
 ####################
-str(q1)
-head(q1)
-q1$FirstNames <- NULL
-q1$LastNames <- NULL
-tail(q1)
-write.csv(q1, file = file.D2L.IMPORT, row.names = FALSE)
+write.csv(d1, file = file.D2L.IMPORT, row.names = FALSE)
 
