@@ -69,7 +69,9 @@ l.col = ncol(d1)-1
 names(d1)[3:l.col] <- Points.Grade[1:(l.col-2)]
 names(d1)[ncol(d1)] = "End-of-Line Indicator"    # add the sapce there
 d1[,ncol(d1)] = "#"
-
+names(d1)[1] = 'OrgDefinedId'
+names(d1)[2] = 'Student.Name'
+head(d1)
 # write data to file
 ####################
 write.csv(d1, file = file.D2L.IMPORT, row.names = FALSE)
