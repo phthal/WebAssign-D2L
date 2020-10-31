@@ -10,7 +10,7 @@ d = data.frame(
     OrgDefinedId = q$OrgDefinedId,
     Last.Name = q$Last.Name,
     First.Name = q$First.Name,
-    UniqName = toupper(paste(substr(q$Last.Name,1,3),substr(q$First.Name,1,1)))
+    UniqName = toupper(paste(substr(q$Last.Name,1,4),substr(q$First.Name,1,2)))
 )
 if (length(unique(d$UniqName))<nrow(d)) print ("ERROR: unique name is not unique, change the length.")
 
